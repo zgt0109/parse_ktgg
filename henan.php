@@ -25,14 +25,15 @@ function findanyou($content){
 // 获取命令行参数
 if (isset($argv[1])) {
   $content = $argv[1].$argv[2];
-  // var_dump($argv);exit;
+  // var_dump($argv);
   $result = findanyou($content);
-  $pattern = "/公开审理([\x{4e00}-\x{9fa5}]*?)[和与诉]([\x{4e00}-\x{9fa5}]*?)".$result."/u";
+  var_dump($result);
+  $pattern = "/公开审理(.*?)[和与诉](.*?)".$result."/u";
   // 公开审理赵朋朋诉中国人寿财产保险股份有限公司新乡市支公司财产保险合同纠纷一案
   // var_dump($result);exit;
   if (preg_match($pattern, $content, $match)) {
     array_shift($match);
-    print_r($match);
+    // print_r($match);die;
     $delete_deng = [];
     // 将等去掉
     foreach ($match as $value) {
@@ -48,7 +49,7 @@ if (isset($argv[1])) {
     $gongsi_array = [];
     // 判断是否是公司，人名不要
     foreach ($delete_deng as $value) {
-      $gongsi_reg = "/[\x{4e00}-\x{9fa5}]{3,}(院|政府|部|委员会|[军部]队|所|局|海关|[银分支商]行|队|处|站|室|机构|中心|[学驾]校|[小中大]学|台|馆|宫|社|会|社[区团]|联[社盟]|公司|集团|企业|园|坊|屋|吧|厂|铺|店|场|库|村|组|人)$/u";
+      $gongsi_reg = "/.{3,}(院|政府|部|委员会|[军部]队|所|局|海关|[银分支商]行|队|处|站|室|机构|中心|[学驾]校|[小中大]学|台|馆|宫|社|会|社[区团]|联[社盟]|公司|集团|企业|园|坊|屋|吧|厂|铺|店|场|库|村|组|人)$/u";
       $strlength = strlen($value);
       if (preg_match($gongsi_reg, $value, $match) && $strlength >= 5) {
         array_push($gongsi_array, $value);
