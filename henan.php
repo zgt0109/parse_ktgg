@@ -27,13 +27,13 @@ if (isset($argv[1])) {
   $content = $argv[1].$argv[2];
   // var_dump($argv);
   $result = findanyou($content);
-  var_dump($result);
+  // var_dump($result);
   $pattern = "/公开审理(.*?)[和与诉](.*?)".$result."/u";
   // 公开审理赵朋朋诉中国人寿财产保险股份有限公司新乡市支公司财产保险合同纠纷一案
   // var_dump($result);exit;
   if (preg_match($pattern, $content, $match)) {
     array_shift($match);
-    print_r($match);
+    // print_r($match);
 
     $delete_deng = [];
     // 将等去掉
@@ -43,13 +43,13 @@ if (isset($argv[1])) {
       }
       array_push($delete_deng, $value);
     }
-    print_r($delete_deng);
+    // print_r($delete_deng);
 
     $names = [];
     // 多个名字取有效的公司名称
     foreach ($delete_deng as $value) {
-      if (preg_match("/、/u", $value)) {
-        $s = explode("、", $value);
+      if (preg_match("/[，、]/u", $value)) {
+        $s = preg_split("/[，、]/u", $value);
         foreach ($s as $value) {
           array_push($names, $value);
         }
@@ -57,7 +57,7 @@ if (isset($argv[1])) {
         array_push($names, $value);
       }
     }
-    print_r($names);
+    // print_r($names);
 
     $final_array = [];
     $personal_array = [];
@@ -72,7 +72,7 @@ if (isset($argv[1])) {
         continue;
       }
     }
-    print_r($gongsi_array);
+    // print_r($gongsi_array);
     // 解析公司名和该公司是原告还是被告
     foreach ($gongsi_array as $value) {
       $pattern = "/^[原被]告/u";
