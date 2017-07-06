@@ -33,7 +33,8 @@ if (isset($argv[1])) {
   // var_dump($result);exit;
   if (preg_match($pattern, $content, $match)) {
     array_shift($match);
-    // print_r($match);die;
+    print_r($match);
+
     $delete_deng = [];
     // 将等去掉
     foreach ($match as $value) {
@@ -44,11 +45,25 @@ if (isset($argv[1])) {
     }
     print_r($delete_deng);
 
+    $names = [];
+    // 多个名字取有效的公司名称
+    foreach ($delete_deng as $value) {
+      if (preg_match("/、/u", $value)) {
+        $s = explode("、", $value);
+        foreach ($s as $value) {
+          array_push($names, $value);
+        }
+      }else {
+        array_push($names, $value);
+      }
+    }
+    print_r($names);
+
     $final_array = [];
     $personal_array = [];
     $gongsi_array = [];
     // 判断是否是公司，人名不要
-    foreach ($delete_deng as $value) {
+    foreach ($names as $value) {
       $gongsi_reg = "/.{3,}(院|政府|部|委员会|[军部]队|所|局|海关|[银分支商]行|队|处|站|室|机构|中心|[学驾]校|[小中大]学|台|馆|宫|社|会|社[区团]|联[社盟]|公司|集团|企业|园|坊|屋|吧|厂|铺|店|场|库|村|组|人)$/u";
       $strlength = strlen($value);
       if (preg_match($gongsi_reg, $value, $match) && $strlength >= 5) {
